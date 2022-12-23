@@ -1,16 +1,34 @@
 import os
 import sys
-import csv
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 
-dir = os.getcwd()
+# get all the csv files
+file_list = []
+for path, subdirs, files in os.walk("../input/"):
+    for name in files:
+        file_list.append(os.path.join(path, name))
 
-PATH = dir + "/../input"
+print(file_list[0])
 
-dirlist = []
+# read each csv file into a list
+data = []
+for file in file_list:
+    df = pd.read_csv(file)
+    file_meta = str(os.path.splitext(os.path.basename(file))[0])
+    x = file_meta.split("_")
+    df["epitope"] = x[0]
+    df["chain"] = x[1]
+    df["donor"] = x[2]
+    df["length"] = df['AA. Seq. CDR3'].str.len()
+    data.append(df)
 
+#print(data[3])
+fig, ax = plt.subplots(5,5)
+ax = ax.ravel()
+for idx in range(25):
+    ax[idx].hist(data[idx]["length"], bins=6)
 
-for root, dirs, files in os.walk(PATH, topdown=False):
-   for name in files:
-     dirlist.append(os.path.join(root, name))
-
-print(dirlist[0])
+plt.tight_layout()
+plt.show()
