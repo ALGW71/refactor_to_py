@@ -10,7 +10,7 @@ for path, subdirs, files in os.walk("../input/"):
     for name in files:
         file_list.append(os.path.join(path, name))
 
-print(file_list[0])
+#print(file_list[0])
 
 # read each csv file into a list
 data = []
@@ -25,10 +25,12 @@ for file in file_list:
     data.append(df)
 
 #print(data[3])
-fig, ax = plt.subplots(5,5)
+fig, ax = plt.subplots(8,7)
+# Numpy ravel needed
 ax = ax.ravel()
-for idx in range(25):
+for idx in range(50):
     ax[idx].hist(data[idx]["length"], bins=6)
+    #print(idx)
 
 plt.tight_layout()
 plt.show()
